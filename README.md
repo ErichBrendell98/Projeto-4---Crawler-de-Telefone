@@ -1,0 +1,1 @@
+Projeto feito em Python com o objetivo de desenvolver um web crawler para busca de números de telefone no site de anúncios: https://django-anuncios.solyd.com.br
