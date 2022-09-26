@@ -65,8 +65,9 @@ if resposta_busca:
     soup_busca = parsing(resposta_busca)
     if soup_busca:
         links = encontrar_links(soup_busca)
-        resposta_anuncio = requisição(DOMINIO + links[1])
-        if resposta_anuncio:
-            soup_anuncio = parsing(resposta_anuncio)
-            if soup_anuncio:
-                encontrar_telefone(soup_anuncio)
+        for link in links:
+            resposta_anuncio = requisição(DOMINIO + link)
+            if resposta_anuncio:
+                soup_anuncio = parsing(resposta_anuncio)
+                if soup_anuncio:
+                    print(encontrar_telefone(soup_anuncio))
