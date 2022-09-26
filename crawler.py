@@ -1,3 +1,6 @@
+import re
+
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -52,7 +55,9 @@ def encontrar_telefone(soup):
         print("Erro ao encontrar descrição")
         return None
     
-    print(descricao)
+    regex = re.findall(r"\(?0?([1-9]{2})[ \-\.\)]{0,2}(9[ \-\.]?\d{4})[ \-\.]?(\d{4})", descricao)
+    if regex:
+        return regex
 
 
 resposta_busca = requisição(URL_AUTOMOVEIS)
@@ -60,7 +65,7 @@ if resposta_busca:
     soup_busca = parsing(resposta_busca)
     if soup_busca:
         links = encontrar_links(soup_busca)
-        resposta_anuncio = requisição(DOMINIO + links[0])
+        resposta_anuncio = requisição(DOMINIO + links[1])
         if resposta_anuncio:
             soup_anuncio = parsing(resposta_anuncio)
             if soup_anuncio:
