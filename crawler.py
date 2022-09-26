@@ -5,7 +5,7 @@ DOMINIO = 'https://django-anuncios.solyd.com.br'
 URL_AUTOMOVEIS = 'https://django-anuncios.solyd.com.br/automoveis/'
 
 
-def buscar(url):
+def requisição(url):
     try:
         resposta = requests.get(url)
         if resposta.status_code == 200:
@@ -16,6 +16,7 @@ def buscar(url):
         print('Erro ao fazer requisição')
         print(error)
 
+
 def parsing(resposta_html):
     try:
         soup = BeautifulSoup(resposta_html, 'html.parser')
@@ -24,21 +25,43 @@ def parsing(resposta_html):
         print('Erro ao fazer parsing HTML')
         print(error)
 
-def encontrar_links(soup):
-    cards_pai = soup.find('div', class_='ui three doubling link cards')
-    cards = cards_pai.find_all('a')
 
+def encontrar_links(soup):
+    try:
+        cards_pai = soup.find('div', class_='ui three doubling link cards')
+        cards = cards_pai.find_all('a')
+    except:
+        print('Erro ao encontar links')
+        return None
+    
     links = []
     for card in cards:
-        link = card['href']
-        links.append(link)
+        try:
+            link = card['href']
+            links.append(link)
+        except:
+            pass
 
     return links
 
 
-resposta = buscar(URL_AUTOMOVEIS)
-if resposta:
-    soup = parsing(resposta)
-    if soup:
-        links = encontrar_links(soup)
-        print(links)
+def encontrar_telefone(soup):
+    try:
+        descricao = soup.find_all('div', class_='sixteen wide column')[2].p.get_text().strip()
+    except:
+        print("Erro ao encontrar descrição")
+        return None
+    
+    print(descricao)
+
+
+resposta_busca = requisição(URL_AUTOMOVEIS)
+if resposta_busca:
+    soup_busca = parsing(resposta_busca)
+    if soup_busca:
+        links = encontrar_links(soup_busca)
+        resposta_anuncio = requisição(DOMINIO + links[0])
+        if resposta_anuncio:
+            soup_anuncio = parsing(resposta_anuncio)
+            if soup_anuncio:
+                encontrar_telefone(soup_anuncio)
