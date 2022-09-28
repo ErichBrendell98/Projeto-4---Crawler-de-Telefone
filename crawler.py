@@ -4,6 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+
 DOMINIO = 'https://django-anuncios.solyd.com.br'
 URL_AUTOMOVEIS = 'https://django-anuncios.solyd.com.br/automoveis/'
 
