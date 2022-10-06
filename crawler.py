@@ -82,6 +82,16 @@ def descobrir_telefones():
                     for telefone in telefones:
                         print(f'Telefone encontrado {telefone}')
                         TELEFONES.append(telefone)
+                        salvar_telefones(telefone)
+
+
+def salvar_telefones(telefone):
+    string_telefone = f'{telefone[0]}{telefone[1]}{telefone[2]}\n'
+    try:
+        with open('telefones.csv', 'a') as arquivo:
+            arquivo.write(string_telefone)
+    except:
+        print('Erro ao salvar arquivo')
 
 
 if __name__ == "__main__":
